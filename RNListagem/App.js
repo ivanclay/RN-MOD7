@@ -11,12 +11,24 @@ const Scroll = styled.ScrollView`
   flex: 1;
 `;
 
-const Item = styled.View`
+//const Item = styled.TouchableHighlight`
+const Item = styled.TouchableOpacity`
   padding: 10px;
+  background-color: #ccc;
+  flex-direction: row;
 `;
 
 const ItemText = styled.Text`
   font-size: 15px;
+  flex: 1;
+`;
+
+const ItemCheck = styled.View`
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  border: 3px solid #000;
+  background-color: #fff;
 `;
 
 export default () => {
@@ -25,8 +37,11 @@ export default () => {
       <Scroll>
         {lista.map((item, index) => {
           return (
-            <Item key={index}>
-              <ItemText>{item.task}</ItemText>
+            <Item key={index} onPress={() => {}} activeOpacity={0.4}>
+              <>
+                <ItemText>{item.task}</ItemText>
+                <ItemCheck />
+              </>
             </Item>
           );
         })}
