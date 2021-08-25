@@ -1,11 +1,15 @@
 import React from 'react';
 import styled from 'styled-components/native';
 
-//const Item = styled.TouchableHighlight`
-const Item = styled.TouchableOpacity`
-  padding: 10px;
+//const Item = styled.TouchableOpacity`
+const Item = styled.TouchableHighlight`
+  height: 50px;
   background-color: #eee;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
 `;
 
 const ItemCheck = styled.View`
@@ -25,7 +29,7 @@ const ItemText = styled.Text`
 
 export default (props) => {
   return (
-    <Item onPress={props.onPress} activeOpacity={0.4}>
+    <Item onPress={props.onPress} activeOpacity={1} underlayColor="#ddd">
       <>
         <ItemText done={props.data.done}>{props.data.task}</ItemText>
         <ItemCheck done={props.data.done} />

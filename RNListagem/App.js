@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import uuid from 'uuid/v4';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 //Components
 import AddItemArea from './src/components/AddItemArea';
 import ListaItem from './src/components/ListaItem';
+import ListaItemSwipe from './src/components/ListaItemSwipe';
 
 //file lista.js
 import lista from './src/files/lista';
@@ -19,7 +21,7 @@ const Listagem = styled.FlatList`
 
 export default () => {
   const [items, setItems] = useState(lista);
-  const addNewItem = (texto) => {
+  const addNewItem = texto => {
     let newItems = [...items];
     newItems.push({
       id: uuid(),
@@ -29,21 +31,32 @@ export default () => {
     setItems(newItems);
   };
 
-  const toggleDone = (index) => {
+  const toggleDone = index => {
     let newItems = [...items];
     newItems[index].done = !newItems[index].done;
+    setItems(newItems);
+  };
+
+  const deleteItem = index => {
+    let newItems = [...items];
+    newItems = newItems.filter((it, i) => i != index);
     setItems(newItems);
   };
 
   return (
     <Page>
       <AddItemArea onAdd={addNewItem} />
-      <Listagem
+      <SwipeListView
         data={items}
         renderItem={({item, index}) => (
           <ListaItem onPress={() => toggleDone(index)} data={item} />
         )}
-        keyExtractor={(item) => item.id}
+        renderHiddenItem={({item, index}) => (
+          <ListaItemSwipe onDelete={() => deleteItem(index)} />
+        )}
+        leftOpenValue={50}
+        disableLeftSwipe={true}
+        keyExtractor={item => item.id}
       />
     </Page>
   );
