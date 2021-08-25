@@ -1,63 +1,73 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 import styled from 'styled-components/native';
-import uuid from 'uuid/v4';
-import {SwipeListView} from 'react-native-swipe-list-view';
 
 //Components
-import AddItemArea from './src/components/AddItemArea';
-import ListaItem from './src/components/ListaItem';
-import ListaItemSwipe from './src/components/ListaItemSwipe';
-
-//file lista.js
-import lista from './src/files/lista';
 
 const Page = styled.SafeAreaView`
   flex: 1;
+  align-items: center;
 `;
 
-const Listagem = styled.FlatList`
-  flex: 1;
+const NameArea = styled.View`
+  background-color: #CCC;
+  padding: 20px;
+  width: 90%;
+  margin-top: 5px;
 `;
+
+const Nome = styled.Text`
+font-size: 18px;
+`;
+
+const Input = styled.TextInput`
+  background-color: #fff;
+  font-size: 15px;
+  height: 50px;
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid #000;
+  width: 90%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+`;
+
+const Salvar = styled.Button``;
 
 export default () => {
-  const [items, setItems] = useState(lista);
-  const addNewItem = texto => {
-    let newItems = [...items];
-    newItems.push({
-      id: uuid(),
-      task: texto,
-      done: false,
-    });
-    setItems(newItems);
+  const [nome, setNome] = useState('');
+  const [novoNome, setNovoNome] = useState('');
+
+  const handleSave = async () => {
+    if (novoNome != '') {
+      await AsyncStorage.setItem('@nome', novoNome);
+      setNome(novoNome);
+      setNovoNome('');
+    }
   };
 
-  const toggleDone = index => {
-    let newItems = [...items];
-    newItems[index].done = !newItems[index].done;
-    setItems(newItems);
+  const getNome = async () => {
+    const n = await AsyncStorage.getItem('@nome');
+    setNome(n);
   };
 
-  const deleteItem = index => {
-    let newItems = [...items];
-    newItems = newItems.filter((it, i) => i != index);
-    setItems(newItems);
-  };
+  useEffect(() => {
+    getNome();
+  }, []);
 
   return (
     <Page>
-      <AddItemArea onAdd={addNewItem} />
-      <SwipeListView
-        data={items}
-        renderItem={({item, index}) => (
-          <ListaItem onPress={() => toggleDone(index)} data={item} />
-        )}
-        renderHiddenItem={({item, index}) => (
-          <ListaItemSwipe onDelete={() => deleteItem(index)} />
-        )}
-        leftOpenValue={50}
-        disableLeftSwipe={true}
-        keyExtractor={item => item.id}
+      <Input
+        placeholder="Qual seu nome?"
+        value={novoNome}
+        onChangeText={texto => setNovoNome(texto)}
       />
+      <Salvar title="Salvar" onPress={handleSave} />
+
+      <NameArea>
+        <Nome>{nome}</Nome>
+      </NameArea>
     </Page>
   );
 };
