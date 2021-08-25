@@ -20,13 +20,14 @@ const ItemText = styled.Text`
   flex: 1;
   font-size: 15px;
   text-decoration: ${props=>props.done ? 'line-through' : ''};
+  font-weight: ${props=>props.done ? 'bold' : 'normal'};
 `;
 
 export default (props) => {
   return (
     <Item onPress={props.onPress} activeOpacity={0.4}>
       <>
-        <ItemText>{props.data.task}</ItemText>
+        <ItemText done={props.data.done}>{props.data.task}</ItemText>
         <ItemCheck done={props.data.done} />
       </>
     </Item>
