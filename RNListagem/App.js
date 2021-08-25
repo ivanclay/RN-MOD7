@@ -29,12 +29,20 @@ export default () => {
     setItems(newItems);
   };
 
+  const toggleDone = (index) => {
+    let newItems = [...items];
+    newItems[index].done = !newItems[index].done;
+    setItems(newItems);
+  };
+
   return (
     <Page>
       <AddItemArea onAdd={addNewItem} />
       <Listagem
         data={items}
-        renderItem={({item}) => <ListaItem data={item} />}
+        renderItem={({item, index}) => (
+          <ListaItem onPress={() => toggleDone(index)} data={item} />
+        )}
         keyExtractor={(item) => item.id}
       />
     </Page>
