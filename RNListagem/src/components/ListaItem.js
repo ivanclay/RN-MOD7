@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 //const Item = styled.TouchableHighlight`
 const Item = styled.TouchableOpacity`
   padding: 10px;
-  background-color: #ccc;
+  background-color: #eee;
   flex-direction: row;
 `;
 

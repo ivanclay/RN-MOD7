@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components/native';
+import uuid from 'uuid/v4';
+
+//Components
+import AddItemArea from './src/components/AddItemArea';
 import ListaItem from './src/components/ListaItem';
 
+//file lista.js
 import lista from './src/files/lista';
 
 const Page = styled.SafeAreaView`
@@ -13,27 +18,25 @@ const Listagem = styled.FlatList`
 `;
 
 export default () => {
+  const [items, setItems] = useState(lista);
+  const addNewItem = (texto) => {
+    let newItems = [...items];
+    newItems.push({
+      id: uuid(),
+      task: texto,
+      done: false,
+    });
+    setItems(newItems);
+  };
+
   return (
     <Page>
+      <AddItemArea onAdd={addNewItem} />
       <Listagem
-        data={lista}
+        data={items}
         renderItem={({item}) => <ListaItem data={item} />}
         keyExtractor={(item) => item.id}
       />
     </Page>
-    // <Page>
-    //   <Listagem>
-    //     {lista.map((item, index) => {
-    //       return (
-    //         <Item key={index} onPress={() => {}} activeOpacity={0.4}>
-    //           <>
-    //             <ItemText>{item.task}</ItemText>
-    //             <ItemCheck />
-    //           </>
-    //         </Item>
-    //       );
-    //     })}
-    //   </Listagem>
-    // </Page>
   );
 };
